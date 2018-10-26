@@ -1,5 +1,5 @@
 {
-    "name": "magentoese/module-msi-inventory-sample-data-demp",
+    "name": "magentoese/module-msi-inventory-sample-data-demo",
     "description": "N/A",
     "require": {
         "php": "~7.1.3||~7.2.0",
