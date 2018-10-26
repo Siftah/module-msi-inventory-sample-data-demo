@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\MsiInventorySampleDataRef\Setup\Patch\Data;
+namespace MagentoEse\MsiInventorySampleDataDemo\Setup\Patch\Data;
 
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
