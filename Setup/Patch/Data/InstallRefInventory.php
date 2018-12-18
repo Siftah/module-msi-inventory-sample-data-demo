@@ -54,9 +54,16 @@ class InstallRefInventory implements DataPatchInterface
 
     public function apply()
     {
-        $this->sampleData->addInventory(['MagentoEse_MsiInventorySampleDataDemo::fixtures/luma_msi_inventory.csv']);
-        $this->sampleData->addInventory(['MagentoEse_MsiInventorySampleDataDemo::fixtures/venia_msi_inventory.csv']);
-        $this->moveInventory->transfer('us_warehouse');
+        if($this->inventoryUpdate()){
+            $this->sampleData->addInventory(['MagentoEse_MsiInventorySampleDataDemo::fixtures/luma_msi_inventory.csv']);
+            $this->sampleData->addInventory(['MagentoEse_MsiInventorySampleDataDemo::fixtures/venia_msi_inventory.csv']);
+            $this->moveInventory->transfer('us_warehouse');
+        }
+
+    }
+
+    public function inventoryUpdate(){
+        return false;
     }
 
     /**

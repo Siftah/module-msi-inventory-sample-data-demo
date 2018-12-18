@@ -10,6 +10,8 @@
         <sequence>
             <module name="Magento_MsiSourceStockSampleData" />
             <module name="Magento_MsiInventorySampleData" />
+            <module name="Magento_CatalogSampleData" />
+            <module name="MagentoEse_VeniaCatalogSampleData" />
         </sequence>
     </module>
 </config>
