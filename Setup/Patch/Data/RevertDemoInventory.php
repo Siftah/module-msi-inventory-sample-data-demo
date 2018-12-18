@@ -13,6 +13,7 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Setup\Patch\PatchHistory;
 use Magento\Inventory\Api\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -58,8 +59,6 @@ class RevertDemoInventory implements DataPatchInterface
     /** @var StockRegistryInterface  */
     protected $stockRegistry;
 
-    /** @var InstallRefInventory  */
-    protected $installRefInventory;
 
 
     /**
@@ -85,8 +84,7 @@ class RevertDemoInventory implements DataPatchInterface
         SourceRepositoryInterface $sourceRepository,
         SourceItemRepositoryInterface $sourceItemRepository,
         SourceItemInterfaceFactory $sourceItemInterfaceFactory,
-        StockRegistryInterface $stockRegistry,
-        InstallRefInventory $installRefInventory
+        StockRegistryInterface $stockRegistry
     )
     {
         $this->installSession = $session;
@@ -99,23 +97,35 @@ class RevertDemoInventory implements DataPatchInterface
         $this->sourceItemRepository = $sourceItemRepository;
         $this->sourceItemInterface = $sourceItemInterfaceFactory;
         $this->stockRegistry = $stockRegistry;
-        $this->installRefInventory = $installRefInventory;
+
     }
 
 
     public function apply()
     {
-
+        ///get active sources.
+        $msiInstalled = false;
+        $this->searchCriteriaBuilder->addFilter('enabled', 1, 'eq');
+        $search = $this->searchCriteriaBuilder->create();
+        $sourceList = $this->sourceRepository->getList($search)->getItems();
+        /// If there are more than one, assume msi inventory is activated
+        if(count($sourceList) > 1){
+            $msiInstalled = true;
+        }
+        /// If there is one and it's not default, assume msi inventory is activated
+        elseif(count($sourceList)==1){
+            if($sourceList[0]->getSourceCode()!='default'){
+                $msiInstalled = true;
+            }
+        }
         //set the sales channel on default stock
         $this->setDefaultSalesChannel();
         //deactivate other sources
         $this->deactivateSources();
         //set inventory for items with MSI
-        if($this->installRefInventory->inventoryUpdate()) {
+        if($msiInstalled) {
             $this->setBaseInventory();
         }
-        //transfer other inventory back to default
-
     }
 
     private function setDefaultSalesChannel(){
@@ -159,9 +169,7 @@ class RevertDemoInventory implements DataPatchInterface
         //delete rows that have store inventory
         $sql = "delete from " . $tableName . " where source_code = 'us_store'";
         $connection->query($sql);
-        $idx = $this->indexer->create();
-        $idx->load('cataloginventory_stock');
-        $idx->reindexAll();
+
         /** @var \Magento\InventoryApi\Api\Data\SourceItemInterface $sourceItem */
         foreach ($sourceItemSearch as $sourceItem){
             $newSourceItem = $this->sourceItemInterface->create();
