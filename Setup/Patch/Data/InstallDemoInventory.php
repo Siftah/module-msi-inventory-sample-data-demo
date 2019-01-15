@@ -11,10 +11,10 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\SampleData\Context as SampleDataContext;
 use Magento\MsiInventorySampleData\Model\InstallInventoryData as SampleData;
 use Magento\MsiInventorySampleData\Model\MoveInventoryFromDefault as MoveInventory;
+use MagentoEse\MsiInventorySampleDataDemo\Setup\SetSession;
 
 
-
-class InstallRefInventory implements DataPatchInterface
+class InstallDemoInventory implements DataPatchInterface
 {
 
     /** @var ModuleDataSetupInterface  */
@@ -32,17 +32,19 @@ class InstallRefInventory implements DataPatchInterface
     protected $moveInventory;
 
     /**
-     * InstallVeniaInventory constructor.
+     * InstallDemoInventory constructor.
      * @param SampleDataContext $sampleDataContext
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param SampleData $sampleData
      * @param MoveInventory $moveInventoryFromDefault
+     * @param SetSession $setSession
      */
     public function __construct(
         SampleDataContext $sampleDataContext,
         ModuleDataSetupInterface $moduleDataSetup,
         SampleData $sampleData,
-        MoveInventory $moveInventoryFromDefault
+        MoveInventory $moveInventoryFromDefault,
+        SetSession $setSession
     )
     {
         $this->moduleDataSetup = $moduleDataSetup;
@@ -64,7 +66,7 @@ class InstallRefInventory implements DataPatchInterface
      */
     public function getAliases()
     {
-        return [];
+        return [InstallDemoInventory::class];
     }
 
     /**
