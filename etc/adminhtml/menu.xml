@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--  /**
+    * Copyright © Magento, Inc. All rights reserved.
+ */-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="MagentoEse_MsiInventorySampleDataDemo::index"
+             translate="title"
+             resource="MagentoEse_MsiInventorySampleDataDemo::index"
+             title="MSI Reset"
+             action="resetmsiinventory/index/index"
+             module="MagentoEse_MsiInventorySampleDataDemo"
+             sortOrder="100"
+             parent="MagentoEse_SCTools::sctoolsmenu"
+             dependsOnModule="Magento_Backend"/>
+        <add id="MagentoEse_MsiInventorySampleDataDemo::revert"
+             translate="title"
+             resource="MagentoEse_MsiInventorySampleDataDemo::index"
+             title="MSI Enable"
+             action="resetmsiinventory/index/revert"
+             module="MagentoEse_MsiInventorySampleDataDemo"
+             sortOrder="101"
+             parent="MagentoEse_SCTools::sctoolsmenu"
+             dependsOnModule="Magento_Backend"/>
+    </menu>
+</config>
