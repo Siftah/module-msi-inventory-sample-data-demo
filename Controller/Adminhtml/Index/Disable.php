@@ -7,32 +7,34 @@
  */
 namespace MagentoEse\MsiInventorySampleDataDemo\Controller\Adminhtml\Index;
 
-use MagentoEse\MsiInventorySampleDataDemo\Model\EnableDemoInventory;
+use MagentoEse\MsiInventorySampleDataDemo\Model\DisableMsiDemoInventory;
 
-class Revert extends \Magento\Backend\App\Action
+class Disable extends \Magento\Backend\App\Action
 {
 
     /** @var \Magento\Framework\View\Result\PageFactory  */
     protected $_pageFactory;
 
-    /** @var EnableDemoInventory  */
-    protected $enableDemoInventory;
+    /** @var DisableMsiDemoInventory  */
+    protected $disableDemoInventory;
 
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $pageFactory,
-        EnableDemoInventory $enableDemoInventory)
+        DisableMsiDemoInventory $disableDemoInventory)
     {
-        $this->enableDemoInventory = $enableDemoInventory;
+        $this->disableDemoInventory = $disableDemoInventory;
         $this->_pageFactory = $pageFactory;
         return parent::__construct($context);
     }
 
     public function execute()
     {
-        $this->enableDemoInventory->apply();
-        echo "Done";
+        $this->disableDemoInventory->apply();
+        echo "MSI Disableddd";
         exit;
     }
 
 }
+
+

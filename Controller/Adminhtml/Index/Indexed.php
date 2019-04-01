@@ -8,7 +8,7 @@
 namespace MagentoEse\MsiInventorySampleDataDemo\Controller\Adminhtml\Index;
 
 
-class Index extends \Magento\Backend\App\Action
+class Indexed extends \Magento\Backend\App\Action
 {
 
     /** @var \Magento\Framework\View\Result\PageFactory  */

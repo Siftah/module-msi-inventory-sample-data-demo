@@ -15,8 +15,9 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\Indexer\Model\IndexerFactory as Reindex;
 
-class EnableDemoInventory
+class EnableMsiDemoInventory
 {
 
     /** @var InstallDemoInventory  */
@@ -43,6 +44,21 @@ class EnableDemoInventory
     /** @var SalesChannelInterfaceFactory  */
     protected $salesChannelInterface;
 
+
+    /** @var Reindex  */
+    protected $reindex;
+
+    /**
+     * EnableDemoInventory constructor.
+     * @param InstallDemoInventory $installDemoInventory
+     * @param SampleDataContext $sampleDataContext
+     * @param SourceRepositoryInterface $sourceRepository
+     * @param SearchCriteriaBuilder $searchCriteria
+     * @param SourceInterface $sourceInterface
+     * @param StockRepositoryInterface $stockRepository
+     * @param SalesChannelInterfaceFactory $salesChannelInterface
+     * @param Reindex $reindex
+     */
     public function __construct(
         InstallDemoInventory $installDemoInventory,
         SampleDataContext $sampleDataContext,
@@ -50,7 +66,8 @@ class EnableDemoInventory
         SearchCriteriaBuilder $searchCriteria,
         SourceInterface $sourceInterface,
         StockRepositoryInterface $stockRepository,
-        SalesChannelInterfaceFactory $salesChannelInterface
+        SalesChannelInterfaceFactory $salesChannelInterface,
+        Reindex $reindex
     )
     {
         $this->installDemoInventory = $installDemoInventory;
@@ -61,11 +78,12 @@ class EnableDemoInventory
         $this->sourceInterface = $sourceInterface;
         $this->stockRepository = $stockRepository;
         $this->salesChannelInterface = $salesChannelInterface;
+        $this->reindex = $reindex;
     }
 
     //Take data from the original install MsiSourceStockSampleData
     public function apply(){
-        //enable stocks
+        //enable sources
         $this->enableSources(['Magento_MsiSourceStockSampleData::fixtures/sources.csv']);
 
         //set sales channel
@@ -73,6 +91,9 @@ class EnableDemoInventory
 
         //reload inventory
         $this->installDemoInventory->apply();
+
+        //reindex stock
+        $this->reindex();
     }
 
 
@@ -125,7 +146,7 @@ class EnableDemoInventory
                         $data[$header[$key]] = $value;
                     }
                     $stockName = $stock->getName();
-                    if ($data['stock_name'] == $stockName) {
+                    if ($data['stock_name'] == $stockName && $data['in_channel']!='') {
                         $stockId = $stock->getStockId();
                         $stock = $this->stockRepository->get($stockId);
                         $extensionAttributes = $stock->getExtensionAttributes();
@@ -160,5 +181,21 @@ class EnableDemoInventory
             ->addFilter(StockInterface::NAME, 'Default Stock', 'neq')->create();
         $allStock = $this->stockRepository->getList($search)->getItems();
         return($allStock);
+    }
+
+
+    public function reindex()
+    {
+        //reindex stock
+        $indexerIds = array(
+            'catalogrule_rule',
+            'cataloginventory_stock',
+            'inventory'
+        );
+        foreach($indexerIds as $index){
+            $indexer = $this->reindex->create()->load($index);
+            $indexer->reindexAll();
+        }
+
     }
 }

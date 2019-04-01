@@ -17,7 +17,7 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Indexer\Model\IndexerFactory as Reindex;
 
-class RevertDemoInventory
+class DisableMsiDemoInventory
 {
 
     /** @var BulkInventoryTransfer  */
@@ -95,11 +95,10 @@ class RevertDemoInventory
         }
         //assign default stock to website
         $this->setDefaultStockSalesChannel();
-        //reindex stock
-        $indexer = $this->reindex->create()->load('cataloginventory_stock');
-        $indexer->reindexAll();
-        echo "fin";
+        $this->reindex();
     }
+
+
 
     /**
      * @return \Magento\InventoryApi\Api\Data\SourceInterface[]
@@ -138,4 +137,18 @@ class RevertDemoInventory
         $this->stockRepository->save($stock);
     }
 
+    public function reindex()
+    {
+        //reindex stock
+        $indexerIds = array(
+            'catalogrule_rule',
+            'cataloginventory_stock',
+            'inventory'
+        );
+        foreach($indexerIds as $index){
+            $indexer = $this->reindex->create()->load($index);
+            $indexer->reindexAll();
+        }
+
+    }
 }
