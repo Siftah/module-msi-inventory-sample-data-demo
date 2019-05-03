@@ -5,7 +5,7 @@
  * Date: 3/5/19
  * Time: 4:40 PM
  */
-namespace MagentoEse\MsiInventorySampleDataDemo\Controller\Adminhtml\Index;
+namespace MagentoEse\MsiInventorySampleDataDemo\Controller\Adminhtml\MsiReset;
 
 use MagentoEse\MsiInventorySampleDataDemo\Model\EnableMsiDemoInventory;
 
@@ -31,8 +31,9 @@ class Enable extends \Magento\Backend\App\Action
     public function execute()
     {
         $this->enableDemoInventory->apply();
-        echo "MSI Enabled";
-        exit;
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('resetmsiinventory/msireset',['message'=>'MSI Inventory Enabled']);
+        return $resultRedirect;
     }
 
 }

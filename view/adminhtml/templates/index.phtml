@@ -1,0 +1,9 @@
+<p><?php print_r($this->getRequest()->getParam('message')); ?>
+</p>
+<form action="<?= $this->getUrl('resetmsiinventory/msireset/disable'); ?>" method="get">
+     <input type="submit" value="Disable MSI Inventory" class="action-default primary add">
+</form>
+<p>&nbsp;</p>
+<form action="<?= $this->getUrl('resetmsiinventory/msireset/enable'); ?>" method="get">
+    <input type="submit" value="Enable MSI Inventory" class="action-default primary add">
+</form>

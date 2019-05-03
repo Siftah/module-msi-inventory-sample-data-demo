@@ -5,7 +5,7 @@
  * Date: 3/5/19
  * Time: 4:40 PM
  */
-namespace MagentoEse\MsiInventorySampleDataDemo\Controller\Adminhtml\Index;
+namespace MagentoEse\MsiInventorySampleDataDemo\Controller\Adminhtml\MsiReset;
 
 use MagentoEse\MsiInventorySampleDataDemo\Model\DisableMsiDemoInventory;
 
@@ -31,8 +31,9 @@ class Disable extends \Magento\Backend\App\Action
     public function execute()
     {
         $this->disableDemoInventory->apply();
-        echo "MSI Disableddd";
-        exit;
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('resetmsiinventory/msireset',['message'=>'MSI Inventory Disabled']);
+        return $resultRedirect;
     }
 
 }
