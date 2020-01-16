@@ -66,7 +66,7 @@ class InstallDemoInventory implements DataPatchInterface
      */
     public function getAliases()
     {
-        return [InstallDemoInventory::class];
+        return [];
     }
 
     /**
@@ -74,9 +74,7 @@ class InstallDemoInventory implements DataPatchInterface
      */
     public static function getDependencies()
     {
-        return [//SetSession::class
-
-        ];
+        return [];
     }
 
 }
