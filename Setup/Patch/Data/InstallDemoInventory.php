@@ -56,9 +56,9 @@ class InstallDemoInventory implements DataPatchInterface
 
     public function apply()
     {
-        $this->sampleData->addInventory(['MagentoEse_MsiInventorySampleDataDemo::fixtures/luma_msi_inventory.csv']);
-        $this->sampleData->addInventory(['MagentoEse_MsiInventorySampleDataDemo::fixtures/venia_msi_inventory.csv']);
-        $this->moveInventory->transfer('us_warehouse');
+//        $this->sampleData->addInventory(['MagentoEse_MsiInventorySampleDataDemo::fixtures/luma_msi_inventory.csv']);
+//        $this->sampleData->addInventory(['MagentoEse_MsiInventorySampleDataDemo::fixtures/venia_msi_inventory.csv']);
+//        $this->moveInventory->transfer('us_warehouse');
     }
 
     /**
